@@ -67,6 +67,15 @@ const projects = [
     link: "#",
     github: "#",
   },
+  {
+    title: "Circular Ring",
+    description:
+      "React Native mobile app—native UI and performance on iOS and Android from a single codebase.",
+    tags: ["React Native", "TypeScript", "Mobile"],
+    color: "from-primary/10 to-accent/20",
+    link: "https://play.google.com/store/apps/details?id=xyz.circular.circular&hl=en_US&pli=1",
+    github: "#",
+  },
 ];
 
 const ProjectsSection = () => {
