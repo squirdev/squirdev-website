@@ -5,22 +5,22 @@ const skillCategories = [
   {
     title: "Blockchain",
     icon: "⛓️",
-    skills: ["Solidity", "Rust (Solana)", "Anchor", "Hardhat", "Foundry", "Ethers.js", "Web3.js", "Wagmi"],
+    skills: ["EVM (Solidity)", "Rust (Solana, Anchor)", "Polkadot (Rust, Substrate)", "Hardhat", "Wagmi", "Viem"],
   },
   {
     title: "AI / LLM",
     icon: "🧠",
-    skills: ["Python", "LangChain", "OpenAI API", "HuggingFace", "RAG", "Fine-tuning", "Vector DBs", "Prompt Engineering"],
+    skills: ["LangChain (LangGraph, LangSmith)", "RAG", "AutoGen", "CrewAI", "n8n", "Fine-tuning", "Vector DBs", "Prompt Engineering", "MCP",],
   },
   {
     title: "Frontend",
     icon: "🎨",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js", "Framer Motion"],
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Material UI", "TanStack Query", "Redux-Saga"],
   },
   {
     title: "Backend & DevOps",
     icon: "⚙️",
-    skills: ["Node.js", "PostgreSQL", "Redis", "Docker", "AWS", "GraphQL"],
+    skills: ["Node.js", "Django (Python)", "PostgreSQL", "Redis", "RabbitMQ", "GraphQL", "Docker", "AWS Lambda", "CI/CD", "Kubernetes"],
   },
 ];
 
