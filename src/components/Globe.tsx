@@ -27,7 +27,7 @@ const Globe = () => {
       markerColor: [0.3, 0.85, 0.7],
       glowColor: isDark ? [0.08, 0.15, 0.18] : [0.85, 0.88, 0.92],
       markers: [
-        { location: [19.4326, -99.1332], size: 0.06 }, // Mexico City
+        { location: [18.4655, -66.1057], size: 0.06 }, // San Juan, Puerto Rico
         { location: [37.7749, -122.4194], size: 0.04 }, // SF
         { location: [51.5074, -0.1278], size: 0.04 }, // London
         { location: [35.6762, 139.6503], size: 0.04 }, // Tokyo

@@ -85,4 +85,4 @@ Blockchain and AI engineer with 10+ years of experience building full-stack appl
 
 ## Education
 
-[Degree] in [Field] — [University Name]
+**Colegio Universitario de San Juan** — San Juan, Puerto Rico
