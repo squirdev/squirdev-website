@@ -1,6 +1,5 @@
-import type { Entry, EntryCollection } from "contentful";
 import { env } from "@/config/env";
-import { getContentfulClient, isContentfulConfigured } from "@/lib/contentful";
+import { requestContentfulGraphql } from "@/lib/contentful-graphql";
 
 /** Parent `portfolios.name` value used for this portfolio owner. */
 export const CONTENTFUL_PORTFOLIOS_OWNER_NAME = "aichannode";
@@ -15,22 +14,6 @@ export type PortfolioCard = {
   link?: string;
 };
 
-function unwrapLocale<T = unknown>(value: T): T | unknown {
-  if (value == null) return value;
-  if (typeof value !== "object" || Array.isArray(value)) return value;
-  const o = value as Record<string, unknown>;
-  const keys = Object.keys(o);
-  if (keys.length === 0) return value;
-  const localeLike = (k: string) => /^[a-z]{2}(-[A-Z]{2})?$/.test(k);
-  if (!keys.every(localeLike)) return value;
-  return (o["en-US"] ?? o["en"] ?? o[keys[0]]) as unknown;
-}
-
-function asString(v: unknown): string {
-  const u = unwrapLocale(v);
-  return typeof u === "string" ? u : u == null ? "" : String(u);
-}
-
 function toUrl(url: string): string | undefined {
   if (!url) return undefined;
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
@@ -38,91 +21,41 @@ function toUrl(url: string): string | undefined {
   return url;
 }
 
-function readTextField(fields: Record<string, unknown>, key: string): string {
-  return asString(fields[key]).trim();
-}
+type GqlAsset = { url?: string | null } | null;
 
-function readStringListField(fields: Record<string, unknown>, key: string): string[] {
-  const raw = unwrapLocale(fields[key]);
-  if (!Array.isArray(raw)) return [];
-  return raw.map((v) => asString(v).trim()).filter(Boolean);
-}
+type GqlPortfolio = {
+  sys: { id: string };
+  title?: string | null;
+  description?: string | null;
+  skills?: Array<string | null> | null;
+  link?: string | null;
+  image?: GqlAsset;
+};
 
-function getEntryFields(entry: Entry): Record<string, unknown> {
-  const raw = entry.fields as Record<string, unknown>;
-  return raw ?? {};
-}
+type GqlPortfoliosCollectionData = {
+  [key: string]: {
+    items: Array<{
+      itemsCollection?: {
+        items: Array<GqlPortfolio | null>;
+      } | null;
+    }>;
+  };
+};
 
-function readImageUrl(fields: Record<string, unknown>): string | undefined {
-  const image = unwrapLocale(fields.image);
-  if (!image || typeof image !== "object") return undefined;
-  const imageEntry = image as { fields?: Record<string, unknown> };
-  const imgFields = imageEntry.fields;
-  if (!imgFields) return undefined;
-  const file = unwrapLocale(imgFields.file);
-  if (!file || typeof file !== "object") return undefined;
-  const fileObj = file as { url?: unknown };
-  return toUrl(asString(fileObj.url));
-}
-
-function mapPortfolioEntry(entry: Entry): PortfolioCard | null {
-  const f = getEntryFields(entry);
-  const title = readTextField(f, "title");
-  const description = readTextField(f, "description");
+function mapPortfolioItem(item: GqlPortfolio): PortfolioCard | null {
+  const title = (item.title ?? "").trim();
+  const description = (item.description ?? "").trim();
   if (!title && !description) return null;
   return {
-    id: entry.sys.id,
+    id: item.sys.id,
     title: title || "Untitled",
     description: description || "",
-    skills: readStringListField(f, "skills"),
-    image: readImageUrl(f),
-    link: toUrl(readTextField(f, "link")),
+    skills: (item.skills ?? [])
+      .map((v) => (v ?? "").trim())
+      .filter(Boolean),
+    image: toUrl((item.image?.url ?? "").trim()),
+    link: toUrl((item.link ?? "").trim()),
   };
-}
-
-function collectIncludedEntries(includes: EntryCollection<Entry>["includes"]): Map<string, Entry> {
-  const map = new Map<string, Entry>();
-  if (!includes?.Entry?.length) return map;
-  for (const e of includes.Entry) {
-    if (e?.sys?.id) map.set(e.sys.id, e);
-  }
-  return map;
-}
-
-function getItemsArray(parent: Entry): unknown[] {
-  const f = getEntryFields(parent);
-  const raw = unwrapLocale(f.items);
-  return Array.isArray(raw) ? raw : [];
-}
-
-function resolvePortfolioItems(parent: Entry, includes: EntryCollection<Entry>["includes"]): PortfolioCard[] {
-  const raw = getItemsArray(parent);
-  const byId = collectIncludedEntries(includes);
-  const out: PortfolioCard[] = [];
-
-  for (const item of raw) {
-    if (!item || typeof item !== "object") continue;
-    const obj = item as Entry | { sys?: { id?: string; type?: string; linkType?: string } };
-
-    if ("fields" in obj && obj.fields && typeof (obj as Entry).sys?.id === "string") {
-      const card = mapPortfolioEntry(obj as Entry);
-      if (card) out.push(card);
-      continue;
-    }
-
-    const sys = obj.sys;
-    const id =
-      sys?.type === "Link" && sys.linkType === "Entry" && typeof sys.id === "string"
-        ? sys.id
-        : undefined;
-    if (!id) continue;
-    const linked = byId.get(id);
-    if (!linked) continue;
-    const card = mapPortfolioEntry(linked);
-    if (card) out.push(card);
-  }
-
-  return out;
 }
 
 function portfoliosContentType(): string {
@@ -130,42 +63,73 @@ function portfoliosContentType(): string {
 }
 
 export async function fetchPortfoliosFromCms(): Promise<PortfolioCard[]> {
-  if (!isContentfulConfigured()) {
-    throw new Error("Contentful is not configured.");
-  }
-
-  const client = getContentfulClient();
-  const ct = portfoliosContentType();
+  const ctSingle = portfoliosContentType();
+  const ctCollection = `${portfoliosContentType()}Collection`;
   const entryId = env.contentfulPortfoliosEntryId;
 
+  let rawItems: Array<GqlPortfolio | null> = [];
+
   if (entryId) {
-    const res = (await client.getEntries({
-      "sys.id": entryId,
-      include: 10,
-      limit: 1,
-    })) as EntryCollection<Entry>;
-    if (!res.items?.length) return [];
-    return resolvePortfolioItems(res.items[0], res.includes);
+    const queryById = `
+      query PortfoliosById($entryId: String!) {
+        ${ctSingle}(id: $entryId) {
+          itemsCollection(limit: 50) {
+            items {
+              __typename
+              ... on Portfolio {
+                sys { id }
+                title
+                description
+                link
+                skills
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    const data = await requestContentfulGraphql<Record<string, { itemsCollection?: { items: Array<GqlPortfolio | null> } | null } | null>>(
+      queryById,
+      { entryId },
+    );
+    rawItems = data[ctSingle]?.itemsCollection?.items ?? [];
+  } else {
+    const queryByName = `
+      query PortfoliosByOwner($ownerName: String!) {
+        ${ctCollection}(limit: 1, where: { name: $ownerName }) {
+          items {
+            itemsCollection(limit: 50) {
+              items {
+                __typename
+                ... on Portfolio {
+                  sys { id }
+                  title
+                  description
+                  link
+                  skills
+                  image {
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    const data = await requestContentfulGraphql<GqlPortfoliosCollectionData>(queryByName, {
+      ownerName: CONTENTFUL_PORTFOLIOS_OWNER_NAME,
+    });
+    const collection = data[ctCollection];
+    if (!collection?.items?.length) return [];
+    rawItems = collection.items[0]?.itemsCollection?.items ?? [];
   }
 
-  const attempts: Record<string, string>[] = [
-    { "fields.name": CONTENTFUL_PORTFOLIOS_OWNER_NAME },
-    { "fields.name.en-US": CONTENTFUL_PORTFOLIOS_OWNER_NAME },
-    { "fields.name.en": CONTENTFUL_PORTFOLIOS_OWNER_NAME },
-  ];
-
-  for (const fieldQuery of attempts) {
-    const res = (await client.getEntries({
-      content_type: ct,
-      ...fieldQuery,
-      limit: 1,
-      include: 10,
-    })) as EntryCollection<Entry>;
-
-    if (res.items?.length) {
-      return resolvePortfolioItems(res.items[0], res.includes);
-    }
-  }
-
-  return [];
+  return rawItems
+    .filter((item): item is GqlPortfolio => Boolean(item?.sys?.id))
+    .map((item) => mapPortfolioItem(item))
+    .filter((item): item is PortfolioCard => Boolean(item));
 }
