@@ -2,7 +2,7 @@ import { env } from "@/config/env";
 import { requestContentfulGraphql } from "@/lib/contentful-graphql";
 
 /** Parent `experiences.name` value used for this portfolio owner. */
-export const CONTENTFUL_OWNER_NAME = "aichannode";
+export const CONTENTFUL_OWNER_NAME = env.contentfulOwnerName ?? "aichannode";
 
 /** Default content type API IDs — override with `VITE_CONTENTFUL_CT_EXPERIENCES` if yours differ. */
 export const CONTENT_TYPE_EXPERIENCES = "experiences";

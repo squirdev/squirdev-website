@@ -19,6 +19,8 @@ export const env = {
   web3formsAccessKey: optionalTrim(import.meta.env.VITE_WEB3FORMS_ACCESS_KEY),
   contentfulSpaceId: optionalTrim(import.meta.env.VITE_CONTENTFUL_SPACE_ID),
   contentfulAccessToken: optionalTrim(import.meta.env.VITE_CONTENTFUL_ACCESS_TOKEN),
+  /** Owner name used to filter parent `experiences`/`portfolios` entries (default: aichannode). */
+  contentfulOwnerName: optionalTrim(import.meta.env.VITE_CONTENTFUL_OWNER_NAME),
   /** Optional: published parent `experiences` entry ID — skips name query when set. */
   contentfulExperiencesEntryId: optionalTrim(import.meta.env.VITE_CONTENTFUL_EXPERIENCES_ENTRY_ID),
   /** Parent content type ID in Contentful (default: `experiences`). */

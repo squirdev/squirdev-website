@@ -2,7 +2,7 @@ import { env } from "@/config/env";
 import { requestContentfulGraphql } from "@/lib/contentful-graphql";
 
 /** Parent `portfolios.name` value used for this portfolio owner. */
-export const CONTENTFUL_PORTFOLIOS_OWNER_NAME = "aichannode";
+export const CONTENTFUL_PORTFOLIOS_OWNER_NAME = env.contentfulOwnerName ?? "aichannode";
 export const CONTENT_TYPE_PORTFOLIOS = "portfolios";
 
 export type PortfolioCard = {
