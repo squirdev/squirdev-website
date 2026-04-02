@@ -2,9 +2,9 @@ import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -50,7 +50,7 @@ export function ProjectDetailModal({
             <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-background">
               <div className="space-y-5 p-5 pt-5 sm:p-6">
                 <DialogHeader className="space-y-3 text-left">
-                  <DialogTitle className="pr-8 text-xl font-bold leading-tight sm:text-2xl">
+                  <DialogTitle className="text-xl font-bold leading-tight sm:text-2xl">
                     {project.title}
                   </DialogTitle>
                   <DialogDescription className="text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -70,18 +70,39 @@ export function ProjectDetailModal({
                     ))}
                   </div>
                 ) : null}
-
-                {live && project.link ? (
-                  <DialogFooter className="flex-col gap-2 pt-1 sm:flex-row sm:justify-start">
-                    <Button asChild className="w-full">
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        Visit live site
-                        <ExternalLink className="size-4 shrink-0" aria-hidden />
-                      </a>
-                    </Button>
-                  </DialogFooter>
-                ) : null}
               </div>
+            </div>
+
+            <div className="flex w-full shrink-0 items-stretch gap-3 bg-background px-5 py-4 sm:px-6">
+              {live && project.link ? (
+                <Button
+                  asChild
+                  className="h-11 min-h-11 min-w-0 flex-1 basis-0 gap-2 px-2 text-sm font-semibold sm:px-4"
+                >
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-w-0 items-center justify-center gap-2"
+                  >
+                    <span className="truncate">Visit this site</span>
+                    <ExternalLink className="size-4 shrink-0" aria-hidden />
+                  </a>
+                </Button>
+              ) : null}
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "h-11 min-h-11 min-w-0 shrink-0 border-primary/45 bg-primary/8 text-sm font-semibold text-primary shadow-sm",
+                    "hover:border-primary/65 hover:bg-primary/15 hover:text-primary",
+                    live && project.link ? "flex-1 basis-0" : "ml-auto w-1/2",
+                  )}
+                >
+                  Close
+                </Button>
+              </DialogClose>
             </div>
           </>
         ) : null}

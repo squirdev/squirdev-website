@@ -10,8 +10,9 @@ export type PortfolioCard = {
   title: string;
   description: string;
   skills: string[];
+  /** Grid thumbnail: first URL from CMS `images` or first entry in `images` for static data. */
   image?: string;
-  /** Extra gallery images (carousel in detail modal). `image` is still the card thumbnail. */
+  /** Remaining gallery URLs after the first (detail modal carousel). Omitted when only one asset. */
   images?: string[];
   link?: string;
 };
@@ -31,8 +32,7 @@ type GqlPortfolio = {
   description?: string | null;
   skills?: Array<string | null> | null;
   link?: string | null;
-  image?: GqlAsset;
-  /** Contentful: field `images` — Media, multiple */
+  /** Contentful: field `images` — Media, many files */
   imagesCollection?: { items: Array<GqlAsset | null> } | null;
 };
 
@@ -51,12 +51,13 @@ function mapPortfolioItem(item: GqlPortfolio): PortfolioCard | null {
   const description = (item.description ?? "").trim();
   if (!title && !description) return null;
 
-  const primary = toUrl((item.image?.url ?? "").trim());
-  const fromGallery = (item.imagesCollection?.items ?? [])
-    .map((a) => toUrl((a?.url ?? "").trim()))
-    .filter(Boolean) as string[];
-
-  const orderedUnique = [...new Set([...(primary ? [primary] : []), ...fromGallery])];
+  const orderedUnique = [
+    ...new Set(
+      (item.imagesCollection?.items ?? [])
+        .map((a) => toUrl((a?.url ?? "").trim()))
+        .filter(Boolean) as string[],
+    ),
+  ];
   const thumb = orderedUnique[0];
   const extras = orderedUnique.length > 1 ? orderedUnique.slice(1) : undefined;
 
@@ -97,10 +98,7 @@ export async function fetchPortfoliosFromCms(): Promise<PortfolioCard[]> {
                 description
                 link
                 skills
-                image {
-                  url
-                }
-                imagesCollection(limit: 15) {
+                imagesCollection(limit: 24) {
                   items {
                     url
                   }
@@ -130,10 +128,7 @@ export async function fetchPortfoliosFromCms(): Promise<PortfolioCard[]> {
                   description
                   link
                   skills
-                  image {
-                    url
-                  }
-                  imagesCollection(limit: 15) {
+                  imagesCollection(limit: 24) {
                     items {
                       url
                     }

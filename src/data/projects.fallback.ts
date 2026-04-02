@@ -43,14 +43,6 @@ export const projectsFallback: ProjectFallbackCard[] = [
     link: "https://aptos.famousfoxes.com/",
   },
   {
-    id: "fallback-ai-trading",
-    title: "AI Trading Assistant",
-    description:
-      "LLM-powered trading bot that analyzes on-chain data, sentiment, and technical indicators to provide actionable insights.",
-    skills: ["Python", "LangChain", "OpenAI", "Web3.py"],
-    color: "from-primary/20 to-primary/5",
-  },
-  {
     id: "fallback-tvt",
     title: "Track Verify Trust",
     description:
@@ -60,14 +52,6 @@ export const projectsFallback: ProjectFallbackCard[] = [
     image: tvtFrontendThumb,
     images: [flashLaunchThumb, circularRing],
     link: "https://tvt-front.vercel.app/",
-  },
-  {
-    id: "fallback-rag",
-    title: "RAG Knowledge Base",
-    description:
-      "Enterprise-grade RAG system with custom embeddings, multi-modal document processing, and conversational retrieval.",
-    skills: ["Python", "Pinecone", "FastAPI", "React"],
-    color: "from-primary/15 to-accent/15",
   },
   {
     id: "fallback-bridge",
