@@ -1,7 +1,9 @@
 import { motion, useInView } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ProjectsEmptyState } from "@/components/projects/ProjectsEmptyState";
-import { ProjectCard, type DisplayProject } from "@/components/projects/ProjectCard";
+import { ProjectCard } from "@/components/projects/ProjectCard";
+import type { DisplayProject } from "@/components/projects/project-types";
+import { ProjectDetailModal } from "@/components/projects/ProjectDetailModal";
 import { ProjectsGridSkeleton } from "@/components/projects/ProjectsGridSkeleton";
 import { PROJECTS_SECTION_SKELETON_COUNT } from "@/constants/projects-ui";
 import { projectsFallback } from "@/data/projects.fallback";
@@ -15,6 +17,7 @@ const defaultGradient = "from-primary/20 to-accent/10";
 const ProjectsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [detailProject, setDetailProject] = useState<DisplayProject | null>(null);
   const { data: cmsItems, isLoading, isError, isSuccess } = usePortfolios();
 
   const { projects, source } = useMemo((): { projects: DisplayProject[]; source: ListSource } => {
@@ -57,6 +60,15 @@ const ProjectsSection = () => {
           </h2>
         </motion.div>
 
+        <ProjectDetailModal
+          project={detailProject}
+          open={detailProject !== null}
+          onOpenChange={(open) => {
+            if (!open) setDetailProject(null);
+          }}
+          fallbackGradient={defaultGradient}
+        />
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {showSkeleton && <ProjectsGridSkeleton keysList={skeletonKeys} />}
 
@@ -71,6 +83,7 @@ const ProjectsSection = () => {
                 index={i}
                 isInView={isInView}
                 defaultGradient={defaultGradient}
+                onOpenDetails={setDetailProject}
               />
             ))}
         </div>

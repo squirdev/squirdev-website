@@ -19,6 +19,7 @@ export const projectsFallback: ProjectFallbackCard[] = [
     skills: ["Next.js", "TypeScript", "Node.js", "EVM"],
     color: "from-primary/20 to-accent/10",
     image: flashLaunchThumb,
+    images: [tokenTool, aptosFamousFoxThumb],
     link: "https://flash-launch.com",
   },
   {
@@ -57,6 +58,7 @@ export const projectsFallback: ProjectFallbackCard[] = [
     skills: ["React", "TypeScript", "Material Tailwind"],
     color: "from-accent/20 to-primary/10",
     image: tvtFrontendThumb,
+    images: [flashLaunchThumb, circularRing],
     link: "https://tvt-front.vercel.app/",
   },
   {

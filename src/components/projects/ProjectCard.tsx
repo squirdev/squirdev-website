@@ -1,21 +1,17 @@
 import { motion } from "framer-motion";
-import type { PortfolioCard } from "@/lib/contentful-portfolio";
+import type { DisplayProject } from "@/components/projects/project-types";
 
-export type DisplayProject = PortfolioCard & { color?: string };
+export type { DisplayProject } from "@/components/projects/project-types";
 
 type ProjectCardProps = {
   project: DisplayProject;
   index: number;
   isInView: boolean;
   defaultGradient: string;
+  onOpenDetails: (project: DisplayProject) => void;
 };
 
-function isLiveProjectLink(url?: string) {
-  return Boolean(url && (url.startsWith("http://") || url.startsWith("https://")));
-}
-
-export function ProjectCard({ project, index, isInView, defaultGradient }: ProjectCardProps) {
-  const live = isLiveProjectLink(project.link);
+export function ProjectCard({ project, index, isInView, defaultGradient, onOpenDetails }: ProjectCardProps) {
   const gradient = project.color ?? defaultGradient;
   const shellClass = `h-40 flex items-center justify-center relative overflow-hidden shrink-0 ${
     project.image ? "" : `bg-gradient-to-br ${gradient}`
@@ -26,7 +22,7 @@ export function ProjectCard({ project, index, isInView, defaultGradient }: Proje
       <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
         {project.title}
       </h3>
-      <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed">{project.description}</p>
+      <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed line-clamp-4">{project.description}</p>
       <div className="flex flex-wrap gap-2">
         {(project.skills ?? []).map((tag) => (
           <span
@@ -47,9 +43,7 @@ export function ProjectCard({ project, index, isInView, defaultGradient }: Proje
           <img
             src={project.image}
             alt=""
-            className={`absolute inset-0 w-full h-full object-cover ${
-              live ? "transition-transform duration-500 group-hover:scale-[1.03]" : ""
-            }`}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/20 to-transparent pointer-events-none" />
         </>
@@ -68,23 +62,15 @@ export function ProjectCard({ project, index, isInView, defaultGradient }: Proje
       transition={{ duration: 0.5, delay: 0.1 * index }}
       className="group rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col"
     >
-      {live ? (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col flex-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
-          aria-label={`Open ${project.title}`}
-        >
-          <div className={`${shellClass} cursor-pointer`}>{thumbnail}</div>
-          {body}
-        </a>
-      ) : (
-        <>
-          <div className={shellClass}>{thumbnail}</div>
-          {body}
-        </>
-      )}
+      <button
+        type="button"
+        onClick={() => onOpenDetails(project)}
+        className="flex flex-col flex-1 w-full cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset rounded-2xl"
+        aria-label={`View details: ${project.title}`}
+      >
+        <div className={shellClass}>{thumbnail}</div>
+        {body}
+      </button>
     </motion.div>
   );
 }

@@ -11,6 +11,8 @@ export type PortfolioCard = {
   description: string;
   skills: string[];
   image?: string;
+  /** Extra gallery images (carousel in detail modal). `image` is still the card thumbnail. */
+  images?: string[];
   link?: string;
 };
 
@@ -30,6 +32,8 @@ type GqlPortfolio = {
   skills?: Array<string | null> | null;
   link?: string | null;
   image?: GqlAsset;
+  /** Contentful: field `images` — Media, multiple */
+  imagesCollection?: { items: Array<GqlAsset | null> } | null;
 };
 
 type GqlPortfoliosCollectionData = {
@@ -46,6 +50,16 @@ function mapPortfolioItem(item: GqlPortfolio): PortfolioCard | null {
   const title = (item.title ?? "").trim();
   const description = (item.description ?? "").trim();
   if (!title && !description) return null;
+
+  const primary = toUrl((item.image?.url ?? "").trim());
+  const fromGallery = (item.imagesCollection?.items ?? [])
+    .map((a) => toUrl((a?.url ?? "").trim()))
+    .filter(Boolean) as string[];
+
+  const orderedUnique = [...new Set([...(primary ? [primary] : []), ...fromGallery])];
+  const thumb = orderedUnique[0];
+  const extras = orderedUnique.length > 1 ? orderedUnique.slice(1) : undefined;
+
   return {
     id: item.sys.id,
     title: title || "Untitled",
@@ -53,7 +67,8 @@ function mapPortfolioItem(item: GqlPortfolio): PortfolioCard | null {
     skills: (item.skills ?? [])
       .map((v) => (v ?? "").trim())
       .filter(Boolean),
-    image: toUrl((item.image?.url ?? "").trim()),
+    image: thumb,
+    images: extras,
     link: toUrl((item.link ?? "").trim()),
   };
 }
@@ -85,6 +100,11 @@ export async function fetchPortfoliosFromCms(): Promise<PortfolioCard[]> {
                 image {
                   url
                 }
+                imagesCollection(limit: 15) {
+                  items {
+                    url
+                  }
+                }
               }
             }
           }
@@ -112,6 +132,11 @@ export async function fetchPortfoliosFromCms(): Promise<PortfolioCard[]> {
                   skills
                   image {
                     url
+                  }
+                  imagesCollection(limit: 15) {
+                    items {
+                      url
+                    }
                   }
                 }
               }
