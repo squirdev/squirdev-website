@@ -4,6 +4,10 @@ import type { DisplayProject } from "@/components/projects/project-types";
 
 export type { DisplayProject } from "@/components/projects/project-types";
 
+function isLiveProjectLink(url?: string) {
+  return Boolean(url && (url.startsWith("http://") || url.startsWith("https://")));
+}
+
 type ProjectCardProps = {
   project: DisplayProject;
   index: number;
@@ -14,9 +18,13 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, index, isInView, defaultGradient, onOpenDetails }: ProjectCardProps) {
   const gradient = project.color ?? defaultGradient;
+  const liveLink = isLiveProjectLink(project.link);
   const shellClass = `h-40 flex items-center justify-center relative overflow-hidden shrink-0 ${
     project.image ? "" : `bg-gradient-to-br ${gradient}`
   }`;
+
+  const arrowClassName =
+    "absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-border/60 bg-background/90 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors duration-300 group-hover:border-primary/35 group-hover:text-primary";
 
   const body = (
     <div className="p-6 flex flex-col flex-1">
@@ -61,7 +69,7 @@ export function ProjectCard({ project, index, isInView, defaultGradient, onOpenD
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: 0.1 * index }}
-      className="group rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col"
+      className="group relative rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col"
     >
       <button
         type="button"
@@ -71,15 +79,25 @@ export function ProjectCard({ project, index, isInView, defaultGradient, onOpenD
       >
         <div className={shellClass}>
           {thumbnail}
-          <div
-            className="pointer-events-none absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-border/60 bg-background/90 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors duration-300 group-hover:border-primary/35 group-hover:text-primary"
-            aria-hidden
-          >
-            <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
-          </div>
+          {!liveLink ? (
+            <span className={`${arrowClassName} pointer-events-none`} aria-hidden>
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
+            </span>
+          ) : null}
         </div>
         {body}
       </button>
+      {liveLink && project.link ? (
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${arrowClassName} z-20`}
+          aria-label={`Open ${project.title} in a new tab`}
+        >
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
+        </a>
+      ) : null}
     </motion.div>
   );
 }

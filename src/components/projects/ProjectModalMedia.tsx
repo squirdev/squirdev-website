@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Loader2 } from "lucide-react";
 import type { DisplayProject } from "@/components/projects/project-types";
 import {
   type CarouselApi,
@@ -13,6 +14,83 @@ import { getProjectGalleryUrls } from "@/utils/project-gallery";
 
 const MEDIA_HEIGHT = "h-[min(26rem,48vh)]";
 
+type LazyModalImageProps = {
+  src: string;
+  /** Card / CMS thumbnail — shown blurred under the spinner while the full image loads (skip if same URL as `src`). */
+  placeholderSrc?: string;
+  /** When true, load immediately (first visible slide / single image). */
+  priority?: boolean;
+  className?: string;
+};
+
+function LazyModalImage({ src, placeholderSrc, priority = false, className }: LazyModalImageProps) {
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
+  const showBlurredThumb = Boolean(placeholderSrc) && placeholderSrc !== src;
+
+  useEffect(() => {
+    setStatus("loading");
+  }, [src]);
+
+  return (
+    <div className="relative h-full w-full min-h-0">
+      {status === "loading" ? (
+        <>
+          {showBlurredThumb ? (
+            <div className="absolute inset-0 z-[1] overflow-hidden" aria-hidden>
+              <img
+                src={placeholderSrc}
+                alt=""
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className="h-full w-full scale-[1.08] object-cover object-center blur-2xl saturate-[0.85] brightness-[0.92]"
+              />
+              <div className="absolute inset-0 bg-background/35" />
+            </div>
+          ) : (
+            <div
+              className="absolute inset-0 z-[1] animate-pulse bg-gradient-to-br from-muted/90 to-muted/50"
+              aria-hidden
+            />
+          )}
+          <div
+            className="absolute inset-0 z-[2] flex items-center justify-center"
+            role="status"
+            aria-live="polite"
+            aria-label="Loading image"
+          >
+            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-background/92 text-primary shadow-lg backdrop-blur-md">
+              <Loader2 className="h-6 w-6 animate-spin" aria-hidden />
+            </span>
+          </div>
+        </>
+      ) : null}
+      <img
+        src={src}
+        alt=""
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        fetchPriority={priority ? "high" : "low"}
+        className={cn(
+          "relative z-[3] block h-full w-full object-cover object-center transition-opacity duration-500",
+          status === "loaded" ? "opacity-100" : "opacity-0",
+          className,
+        )}
+        onLoad={() => setStatus("loaded")}
+        onError={() => setStatus("error")}
+      />
+      {status === "error" ? (
+        <div
+          className="absolute inset-0 z-[4] flex items-center justify-center bg-muted/50 text-center text-xs text-muted-foreground"
+          role="status"
+        >
+          Image unavailable
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 type ProjectModalMediaProps = {
   project: DisplayProject;
   gradientClass: string;
@@ -20,6 +98,7 @@ type ProjectModalMediaProps = {
 
 export function ProjectModalMedia({ project, gradientClass }: ProjectModalMediaProps) {
   const urls = useMemo(() => getProjectGalleryUrls(project), [project]);
+  const thumbPlaceholder = project.image;
 
   if (urls.length === 0) {
     return (
@@ -41,15 +120,25 @@ export function ProjectModalMedia({ project, gradientClass }: ProjectModalMediaP
           "relative w-full shrink-0 overflow-hidden bg-muted/10",
         )}
       >
-        <img src={urls[0]} alt="" className="block h-full w-full object-cover object-center" />
+        <LazyModalImage src={urls[0]} placeholderSrc={thumbPlaceholder} priority />
       </div>
     );
   }
 
-  return <ModalImageCarousel urls={urls} projectId={project.id} />;
+  return (
+    <ModalImageCarousel urls={urls} projectId={project.id} placeholderSrc={thumbPlaceholder} />
+  );
 }
 
-function ModalImageCarousel({ urls, projectId }: { urls: string[]; projectId: string }) {
+function ModalImageCarousel({
+  urls,
+  projectId,
+  placeholderSrc,
+}: {
+  urls: string[];
+  projectId: string;
+  placeholderSrc?: string;
+}) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
 
@@ -71,7 +160,7 @@ function ModalImageCarousel({ urls, projectId }: { urls: string[]; projectId: st
         <CarouselContent className="-ml-0 h-full">
           {urls.map((src, idx) => (
             <CarouselItem key={`${projectId}-${idx}-${src}`} className="h-full basis-full pl-0">
-              <img src={src} alt="" className="block h-full w-full object-cover object-center" />
+              <LazyModalImage src={src} placeholderSrc={placeholderSrc} priority={idx === 0} />
             </CarouselItem>
           ))}
         </CarouselContent>
