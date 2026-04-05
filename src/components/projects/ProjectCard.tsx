@@ -23,7 +23,7 @@ export function ProjectCard({ project, index, isInView, defaultGradient, onOpenD
     }`;
 
   const arrowClassName =
-    "absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-border/60 bg-background/90 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors duration-300 group-hover:border-primary/35 group-hover:text-primary";
+    "absolute right-1.5 top-1.5 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-border/60 bg-background/90 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors duration-300 group-hover:border-primary/35 group-hover:text-primary";
 
   const body = (
     <div className="p-6 flex flex-col flex-1">
