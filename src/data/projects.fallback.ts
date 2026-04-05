@@ -15,8 +15,8 @@ export const projectsFallback: ProjectFallbackCard[] = [
     id: "fallback-flash-launch",
     title: "Flash Launch",
     description:
-      "No-code decentralized launchpad for token creation, presales, and fair launches—with KYC and investor-focused tooling.",
-    skills: ["Next.js", "TypeScript", "Node.js", "EVM"],
+      "No-code launchpad for token creation, presales, and fair launches—with KYC and investor-focused tooling.",
+    skills: ["Next.js", "TypeScript", "Node.js", "Full-stack"],
     color: "from-primary/20 to-accent/10",
     image: flashLaunchThumb,
     images: [tokenTool, aptosFamousFoxThumb],
@@ -26,8 +26,8 @@ export const projectsFallback: ProjectFallbackCard[] = [
     id: "fallback-token-tool",
     title: "TokenTool.io",
     description:
-      "Create and deploy ERC20 and Solana SPL tokens in minutes—EVM chains plus Solana, with Raydium liquidity tooling.",
-    skills: ["Next.js", "TypeScript", "Solana", "EVM"],
+      "Create and deploy fungible tokens with liquidity tooling across supported networks—fast flows and production-ready defaults.",
+    skills: ["Next.js", "TypeScript", "Node.js", "Full-stack"],
     color: "from-accent/15 to-primary/20",
     image: tokenTool,
     link: "https://www.tokentool.io/",
@@ -46,7 +46,7 @@ export const projectsFallback: ProjectFallbackCard[] = [
     id: "fallback-tvt",
     title: "Track Verify Trust",
     description:
-      "Blockchain-based supply chain tracking platform on Solana, enabling transparent product verification for consumers and businesses.",
+      "Supply chain tracking platform enabling transparent product verification for consumers and businesses.",
     skills: ["React", "TypeScript", "Material Tailwind"],
     color: "from-accent/20 to-primary/10",
     image: tvtFrontendThumb,

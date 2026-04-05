@@ -13,30 +13,30 @@ export const experiencesFallback: ExperienceCard[] = [
   },
   {
     id: "fallback-thorswap",
-    role: "Web3 Engineer",
+    role: "Software Engineer",
     company: "Thorswap Finance",
     period: "Oct 2023 – Sep 2024",
     current: false,
     summary:
-      "Worked on SwapKit and APIs for cross-chain swaps across many networks, integrating THORChain, Chainflip, and Maya, plus wallet flows and optional AML/KYT screening.",
+      "Built SwapKit and APIs for cross-asset swaps, integrated liquidity and routing providers, improved wallet flows, and shipped screening and compliance hooks where required.",
   },
   {
     id: "fallback-flash",
-    role: "Full-Stack & Blockchain Engineer",
+    role: "Full-Stack Engineer",
     company: "Flash Technologies",
     period: "Mar 2021 – Oct 2023",
     current: false,
     summary:
-      "Shipped DeFi products—token launches, presales, launchpads, and NFT utilities—with Solidity on EVM, Solana programs in Rust/Anchor, audit coordination (CertiK), and Slither-based analysis.",
+      "Shipped launch and presale products, NFT features, and internal tooling end to end; coordinated security reviews with auditors and improved release quality across the stack.",
   },
   {
     id: "fallback-icicb",
-    role: "Blockchain Developer",
+    role: "Full-Stack Developer",
     company: "ICICB",
     period: "Jan 2019 – Jul 2020",
     current: false,
     summary:
-      "Delivered Web3 integrations and a React Native wallet, customized DEX-style platforms, trading automation, and NFT marketplaces and games.",
+      "Delivered React Native and web apps, trading and marketplace flows, and third-party integrations with a focus on performance and maintainable UI.",
   },
   {
     id: "fallback-beyond",

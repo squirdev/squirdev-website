@@ -97,7 +97,7 @@ const ContactSection = () => {
           </h2>
 
           <p className="text-muted-foreground text-lg mb-12 max-w-xl">
-            Have a project in mind? Whether it's blockchain, AI, or full-stack — I'd love to hear about it.
+            Have a project in mind? Whether it's AI, product work, or full-stack — I'd love to hear about it.
           </p>
         </motion.div>
 

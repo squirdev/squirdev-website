@@ -84,10 +84,11 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Building the future at the intersection of{" "}
-            <span className="text-primary">EVM & Solana</span> ecosystems and{" "}
-            <span className="text-accent">Large Language Models</span>.
-            Currently engineering at <span className="text-foreground font-semibold">RadCrew</span>.
+            I’m a <span className="text-foreground font-medium">full stack</span> and{" "}
+            <span className="text-accent">AI</span> engineer — shipping products end to end, from
+            backends and APIs to interfaces and <span className="text-primary">LLM</span>-powered
+            features. I focus on reliable systems, great UX, and shipping fast. Currently at{" "}
+            <span className="text-foreground font-semibold">RadCrew</span>.
           </motion.p>
 
           <motion.div

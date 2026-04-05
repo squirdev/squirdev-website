@@ -26,7 +26,7 @@ const AboutSection = () => {
             <span className="text-primary font-mono text-sm tracking-wider uppercase">About Me</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-8 text-foreground">
-            Crafting the <span className="gradient-text">Decentralized Future</span>
+            Building <span className="gradient-text">Products That Ship</span>
           </h2>
         </motion.div>
 
@@ -39,25 +39,25 @@ const AboutSection = () => {
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             <div className="space-y-5 text-muted-foreground leading-relaxed">
               <p>
-                I'm a passionate Blockchain and AI Engineer with deep expertise in EVM-compatible chains,
-                Solana, and Large Language Models. Currently working at <span className="text-primary font-semibold">RadCrew</span>,
-                I build cutting-edge decentralized applications and AI-powered solutions.
+                I'm a full stack and AI engineer who cares about clear architecture, maintainable code,
+                and products people actually use. Currently at <span className="text-primary font-semibold">RadCrew</span>,
+                I build features across the stack — from APIs and data layers to polished UIs — and ship
+                LLM-powered experiences where they add real value.
               </p>
               <p>
-                From smart contract development and DeFi protocols to building intelligent
-                AI agents, I thrive at the intersection of Web3 and artificial intelligence —
-                creating technology that's both powerful and accessible.
+                I enjoy owning problems end to end: discovery, implementation, observability, and iteration.
+                That mix of product sense and engineering depth is what keeps me excited about the work.
               </p>
             </div>
             <div className="space-y-5 text-muted-foreground leading-relaxed">
               <p>
-                My journey spans from architecting complex on-chain systems on Ethereum and Solana
-                to fine-tuning LLMs and building production-grade AI applications. I believe in
-                writing clean, auditable code that stands the test of adversarial environments.
+                On the AI side, I've worked with RAG, prompt design, guardrails, and production LLM APIs —
+                always with an eye on latency, cost, and reliability. On the application side, I'm
+                comfortable in TypeScript-heavy frontends, Node services, and cloud-native deployments.
               </p>
               <p>
-                When I'm not shipping code, I'm exploring the latest in zero-knowledge proofs,
-                chain abstraction, and multi-modal AI systems.
+                When I'm not shipping code, I'm reading about new model capabilities, developer tooling,
+                and better ways to test and ship software.
               </p>
             </div>
           </div>
