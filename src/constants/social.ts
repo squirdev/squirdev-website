@@ -1,11 +1,11 @@
 /**
- * Public social URLs for the site.
- * Swap `discord` for your server invite (https://discord.gg/…) when you have one.
+ * Legacy URL map — prefer `useSocialProfile()` / Contentful `social` entry.
+ * Kept for quick reference; values mirror `socialProfileFallback`.
  */
+import { socialProfileFallback } from "@/data/social.fallback";
+
 export const SOCIAL_URLS = {
-  github: "https://github.com/aichannode",
-  linkedin: "https://www.linkedin.com/in/aichannode",
-  gmail: "mailto:aichannode@gmail.com",
-  telegram: "https://t.me/aichannode",
-  discord: "https://discord.com",
+  github: socialProfileFallback.github ?? "",
+  linkedin: socialProfileFallback.linkedin ?? "",
+  gmail: socialProfileFallback.email ? `mailto:${socialProfileFallback.email.replace(/^mailto:/i, "")}` : "",
 } as const;

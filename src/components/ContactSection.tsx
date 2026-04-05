@@ -3,12 +3,17 @@ import { useRef, useState, type FormEvent } from "react";
 import { Loader2, Mail, MapPin, Send } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { env, isWeb3FormsConfigured } from "@/config/env";
+import { useSocialProfile } from "@/hooks/useSocialProfile";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 
 const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { profile } = useSocialProfile();
+  const emailDisplay = profile.email?.trim() || "aichannode@gmail.com";
+  const emailHref = emailDisplay.startsWith("mailto:") ? emailDisplay : `mailto:${emailDisplay}`;
+  const locationDisplay = profile.location?.trim() || "Puerto Rico";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -110,8 +115,8 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Email</div>
-                  <a href="mailto:aichannode@gmail.com" className="text-foreground hover:text-primary transition-colors font-medium">
-                    aichannode@gmail.com
+                  <a href={emailHref} className="text-foreground hover:text-primary transition-colors font-medium">
+                    {emailDisplay.replace(/^mailto:/i, "")}
                   </a>
                 </div>
               </div>
@@ -122,7 +127,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Location</div>
-                  <div className="text-foreground font-medium">Puerto Rico</div>
+                  <div className="text-foreground font-medium">{locationDisplay}</div>
                 </div>
               </div>
 
