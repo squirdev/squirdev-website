@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        var theme = t === "light" || t === "dark" ? t : "dark";
+        document.documentElement.classList.remove("light", "dark");
+        document.documentElement.classList.add(theme);
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Initial crawl / no-JS fallback; `SiteDocumentHead` overwrites from Contentful when the app loads -->
