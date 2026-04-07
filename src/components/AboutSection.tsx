@@ -39,7 +39,7 @@ const AboutSection = () => {
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             <div className="space-y-5 text-muted-foreground leading-relaxed">
               <p>
-                I'm a passionate Blockchain and AI Engineer with deep expertise in EVM-compatible chains,
+                I'm a passionate Fullstack and Blockchain Engineer with deep expertise in EVM-compatible chains,
                 Solana, and Large Language Models. Currently working at <span className="text-primary font-semibold">RadCrew</span>,
                 I build cutting-edge decentralized applications and AI-powered solutions.
               </p>
