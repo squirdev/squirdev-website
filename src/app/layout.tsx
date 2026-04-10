@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -13,6 +13,12 @@ const themeInit = `
   } catch (e) { }
 })();
 `;
+
+/** Same as legacy Vite `index.html` viewport — avoids default / device-specific text scaling drift */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Jesus Monroig | Blockchain & Blockchain Engineer",
@@ -42,7 +48,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body
+        className="m-0 bg-background font-body text-foreground antialiased"
+        suppressHydrationWarning
+      >
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInit}
         </Script>

@@ -56,7 +56,7 @@ const ExperienceSection = () => {
 
   return (
     <section id="experience" className="py-32 relative overflow-x-clip" ref={ref}>
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
