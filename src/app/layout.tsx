@@ -21,26 +21,26 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Jesus Monroig | Blockchain & Blockchain Engineer",
+  title: "Hector Rosado | Full Stack & AI Engineer",
   description:
-    "Jesus Monroig — Fullstack & Blockchain Engineer specializing in EVM, Solana, and LLMs. Currently at RadCrew.",
-  authors: [{ name: "Jesus Monroig" }],
+    "Hector Rosado — Full stack and AI engineer. End-to-end product work, APIs, and LLMs. Currently at RadCrew.",
+  authors: [{ name: "Hector Rosado" }],
   icons: {
     icon: "/logo.png",
   },
   openGraph: {
-    title: "Jesus Monroig | Fullstack & Blockchain Engineer",
+    title: "Hector Rosado | Full Stack & AI Engineer",
     description:
-      "Jesus Monroig — Fullstack & Blockchain Engineer specializing in EVM, Solana, and LLMs. Currently at RadCrew.",
+      "Hector Rosado — Full stack and AI engineer. End-to-end product work, APIs, and LLMs. Currently at RadCrew.",
     type: "website",
     images: ["https://ibb.co/chy1bBC5"],
   },
   twitter: {
     card: "summary_large_image",
     site: "@Lovable",
-    title: "Jesus Monroig | Fullstack & Blockchain Engineer",
+    title: "Hector Rosado | Full Stack & AI Engineer",
     description:
-      "Jesus Monroig — Fullstack & Blockchain Engineer specializing in EVM, Solana, and LLMs. Currently at RadCrew.",
+      "Hector Rosado — Full stack and AI engineer. End-to-end product work, APIs, and LLMs. Currently at RadCrew.",
     images: ["https://ibb.co/chy1bBC5"],
   },
 };
