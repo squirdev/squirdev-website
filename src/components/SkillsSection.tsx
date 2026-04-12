@@ -88,7 +88,7 @@ const SkillsSection = () => {
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-12 bg-primary" />
-            <span className="text-primary font-mono text-sm tracking-wider uppercase">Skills</span>
+            <span className="title-glow-sm text-primary font-mono text-sm tracking-wider uppercase">Skills</span>
           </div>
 
           <h2 className="text-3xl md:text-5xl font-bold mb-16 text-foreground">

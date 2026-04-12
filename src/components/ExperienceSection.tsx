@@ -64,7 +64,7 @@ const ExperienceSection = () => {
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-12 bg-primary" />
-            <span className="text-primary font-mono text-sm tracking-wider uppercase">Experience</span>
+            <span className="title-glow-sm text-primary font-mono text-sm tracking-wider uppercase">Experience</span>
           </div>
 
           <h2 className="text-3xl md:text-5xl font-bold mb-16 text-foreground">
