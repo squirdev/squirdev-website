@@ -2,11 +2,11 @@
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { CryptoIcon, type CryptoKind } from "@/components/crypto-cursor-icons";
+import { DiamondParticleIcon, type DiamondParticleKind } from "@/components/diamond-cursor-icons";
 
 const OFF = -9999;
 
-const KINDS: CryptoKind[] = ["eth", "btc", "sol"];
+const KINDS: DiamondParticleKind[] = ["ai", "btc", "sol"];
 
 type EmitterParticle = {
   id: string;
@@ -14,7 +14,7 @@ type EmitterParticle = {
   cy: number;
   angle: number;
   dist: number;
-  kind: CryptoKind;
+  kind: DiamondParticleKind;
   spin: number;
 };
 
@@ -50,7 +50,7 @@ const CLICKABLE_INPUT_TYPES = new Set([
 
 /**
  * True when the hit target is (or is inside) something typically clickable.
- * Opt in extra targets with `data-crypto-cursor-interactive`. Opt out with `data-crypto-cursor-passive`.
+ * Opt in extra targets with `data-diamond-cursor-interactive`. Opt out with `data-diamond-cursor-passive`.
  */
 function isClickableHit(hit: Element | null): boolean {
   let node: Element | null = hit;
@@ -60,11 +60,11 @@ function isClickableHit(hit: Element | null): boolean {
       node = node.parentElement;
       continue;
     }
-    if (node.hasAttribute("data-crypto-cursor-passive")) {
+    if (node.hasAttribute("data-diamond-cursor-passive")) {
       node = node.parentElement;
       continue;
     }
-    if (node.hasAttribute("data-crypto-cursor-interactive")) {
+    if (node.hasAttribute("data-diamond-cursor-interactive")) {
       return true;
     }
     if (node.hasAttribute("disabled") || node.getAttribute("aria-disabled") === "true") {
@@ -101,7 +101,7 @@ function isClickableHit(hit: Element | null): boolean {
   return false;
 }
 
-export function CryptoCursor() {
+export function DiamondCursor() {
   const [active, setActive] = useState(false);
   const [showFollower, setShowFollower] = useState(false);
   const [overClickable, setOverClickable] = useState(false);
@@ -136,7 +136,7 @@ export function CryptoCursor() {
     if (!fine || reduce) return;
 
     setActive(true);
-    document.documentElement.classList.add("crypto-cursor-active");
+    document.documentElement.classList.add("diamond-cursor-active");
 
     const onLeaveWindow = () => {
       setShowFollower(false);
@@ -159,7 +159,7 @@ export function CryptoCursor() {
     document.documentElement.addEventListener("pointerleave", onLeaveWindow);
 
     return () => {
-      document.documentElement.classList.remove("crypto-cursor-active");
+      document.documentElement.classList.remove("diamond-cursor-active");
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       document.documentElement.removeEventListener("pointerleave", onLeaveWindow);
@@ -211,7 +211,7 @@ export function CryptoCursor() {
               animate={overClickable ? { scale: 1.14 } : { scale: 1 }}
               transition={{ type: "spring", stiffness: 420, damping: 24 }}
             >
-              <CryptoIcon kind="eth" className="h-full w-full" />
+              <DiamondParticleIcon kind="ai" className="h-full w-full" />
             </motion.div>
           </motion.div>
         </>
@@ -239,7 +239,7 @@ export function CryptoCursor() {
           transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
           onAnimationComplete={() => removeParticle(p.id)}
         >
-          <CryptoIcon kind={p.kind} className="h-full w-full" />
+          <DiamondParticleIcon kind={p.kind} className="h-full w-full" />
         </motion.div>
       ))}
     </>

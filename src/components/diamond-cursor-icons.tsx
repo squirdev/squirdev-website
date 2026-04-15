@@ -3,11 +3,15 @@
 import { useId } from "react";
 import { cn } from "@/lib/utils";
 
-/** Compact Ethereum mark (cursor + particles). */
-export function IconEth({ className }: { className?: string }) {
+/** Sharp diamond frame — reads like a chip / neural node at cursor size. */
+export function IconAi({ className }: { className?: string }) {
   return (
     <svg className={cn(className)} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 2 22 12 12 22 2 12 12 2zm0 4.5L6.5 12 12 17.5 17.5 12 12 6.5z"
+      />
     </svg>
   );
 }
@@ -52,15 +56,15 @@ export function IconSol({ className }: { className?: string }) {
   );
 }
 
-export type CryptoKind = "eth" | "btc" | "sol";
+export type DiamondParticleKind = "ai" | "btc" | "sol";
 
-export function CryptoIcon({ kind, className }: { kind: CryptoKind; className?: string }) {
+export function DiamondParticleIcon({ kind, className }: { kind: DiamondParticleKind; className?: string }) {
   switch (kind) {
     case "btc":
       return <IconBtc className={className} />;
     case "sol":
       return <IconSol className={className} />;
     default:
-      return <IconEth className={cn("text-primary", className)} />;
+      return <IconAi className={cn("text-primary", className)} />;
   }
 }
